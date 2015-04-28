@@ -475,6 +475,7 @@ void ext2::ChooseToDirectory()
 
 }
 
+/*
 //function that gets the block type
 void ext2::fetchBlockType()
 {
@@ -509,6 +510,7 @@ void ext2::fetchBlockType()
 
 	cout << "\nBlock Type: " << Type << "\n\n";
 }
+*/
 
 //fucntion that gets single indirect block
 void ext2::fetchSingleIndirectBlock()
