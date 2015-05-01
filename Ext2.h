@@ -252,6 +252,10 @@ void ext2::readSuperblockInfo()
 		} else {
 		cout << "NO\n\n";
 		}
+
+	cout << "\n    Block size:\t\t\t"        
+	     << blockSize
+	     << "\n\n";
 	    
 }
 
