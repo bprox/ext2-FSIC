@@ -410,7 +410,6 @@ void ext2::OutputInodeTableBlock()
 	{
 		cout << buffer[i + InodeTableBlock + 1024];
 	}
-	ChooseToDirectory();
 }
 
 //function to choose directory to move file to 
@@ -703,22 +702,6 @@ void ext2::fetchDirectBlock()
 	}
 }
 
-//function that moves the file
-void ext2::MoveFile()
-{
-	ifstream source(filename, ios::binary);
-
-    ofstream dest(outputDirectory, ios::binary);
-
-    istreambuf_iterator<char> begin_source(source);
-    istreambuf_iterator<char> end_source;
-    ostreambuf_iterator<char> begin_dest(dest); 
-    copy(begin_source, end_source, begin_dest);
-
-    source.close();
-    dest.close();
-    ChooseDirectory();
-}
 
 //function that gets the block
 void ext2::fetchBlock()
