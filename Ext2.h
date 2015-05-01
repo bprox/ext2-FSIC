@@ -248,15 +248,13 @@ void ext2::readSuperblockInfo()
 	     << theSuperblock.s_magic
 	     << "\n    Superblock Magic Number is Correct:\t";	
 	     if (theSuperblock.s_magic == EXT2_SUPER_MAGIC) {
-		cout << "YES\n\n";
+		cout << "YES";
 		} else {
-		cout << "NO\n\n";
+		cout << "NO";
 		}
+	cout << "\n    Total inodes:\t\t"    
+	     << theSuperblock.s_inodes_count;
 
-	cout << "\n    Block size:\t\t\t"        
-	     << blockSize
-	     << "\n\n";
-	    
 }
 
 //function reads in the data from the inode table and parses it
