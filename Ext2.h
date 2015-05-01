@@ -252,9 +252,10 @@ void ext2::readSuperblockInfo()
 		} else {
 		cout << "NO";
 		}
-	cout << "\n    Total inodes:\t\t"    
-	     << theSuperblock.s_inodes_count;
 
+	cout << "\n    Block size:\t\t\t"        
+	     << "\n\n";
+	    
 }
 
 //function reads in the data from the inode table and parses it
