@@ -465,20 +465,9 @@ void ext2::ChooseDirectory()
 	}
 }
 
-//function that moves file to directory 
+ 
 void ext2::ChooseToDirectory()
 {
-	string node  = ".";
-
-	cout << "\nSelect directory to move files to: ";
-	getline(cin, tempname);
-	outputDirectory = new char[tempname.length()];
-	for(int i=0; i<tempname.length(); i++)
-	{
-		outputDirectory[i] = tempname[i];
-	}
-
-	MoveFile();
 
 }
 
