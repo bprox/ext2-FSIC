@@ -255,9 +255,9 @@ void ext2::readSuperblockInfo()
 
 	cout << "\n    File System State:\t";	
 	     if (theSuperblock.s_state == 1) {
-		cout << "CLEAN";
+		cout << "CLEAN\n\n";
 		} else {
-		cout << "HAS ERRORS";
+		cout << "HAS ERRORS\n\n";
 		}
 	    
 }
