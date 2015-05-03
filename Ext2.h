@@ -761,8 +761,8 @@ void ext2::checkSuperblockConsistency()
 		block_group_address = ((currentBlockGroupNum - 1) * theSuperblock.s_blocks_per_group);
 
 		//read SB of current block group into bufferTemp for comparison
-		cout << "... reading in SB of group number: " << currentBlockGroupNum << "\n";
-		filestream.seekg(block_group_address, ios_base::beg); 
+		cout << "... reading i n SB of group number: " << currentBlockGroupNum << "\n";
+		filestream.seekg(block_group_address); 
 		filestream.read(bufferTemp, 1024); 
 		memcpy(&blockGroupSB, bufferTemp, 1024);
 
@@ -772,19 +772,18 @@ void ext2::checkSuperblockConsistency()
   		n=strcmp ( buffer, bufferTemp);
   		cout << "n = " << n << endl;
 
-/*
+
   		if(n == 0)
   		{
   			cout << "Superblock is CONSISTENT\n\n";
   		}
   		else
   			cout << "INCONSISTENT\n\n";
-*/
+
 		//clear bufferTemp buffer
 		bufferTemp = new char[blockSize];
 
 	} //end for
-
-	//clear buffer
-	buffer = new char[blockSize];	    
+    
+  	buffer = new char[blockSize];	
 }
