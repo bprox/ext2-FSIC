@@ -31,7 +31,6 @@ class ext2
 		void readDirectoryInfo();
 		void ChooseDirectory();
 		void ChooseToDirectory();	
-		void MoveFile();	 
 		void fetchBlock();               
 		void fetchBlockType();
 		void fetchDirectBlock();
