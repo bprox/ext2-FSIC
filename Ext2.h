@@ -329,6 +329,12 @@ void ext2::readGroupDescriptorTable()
 	memcpy(&gblock, buffer, 32);
 	
 	
+	/* # of block groups on disk */
+	unsigned int groups = theSuperblock.s_blocks_count / theSuperblock.s_blocks_per_group;
+
+	/* size of group descriptor list in bytes */
+	unsigned int desc_list_size = groups * sizeof(struct Groupblock);
+
 	usedinodes = theSuperblock.s_inodes_per_group - gblock.bg_free_inodes_count;
 	
 	cout << "Group Information from the Group Descriptor Table:"
