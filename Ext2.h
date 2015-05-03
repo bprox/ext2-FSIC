@@ -37,7 +37,8 @@ class ext2
 		void fetchSingleIndirectBlock();
 		void fetchDoubleIndirectBlock();
 		void fetchTripleIndirectBlock();
-		void OutputInodeTableBlock();                        
+		void OutputInodeTableBlock();
+		void checkSuperblockConsistency();                        
 		
 	private:
 
@@ -144,9 +145,10 @@ class ext2
 			int        usedinodes;               	
 		    
 		    char *     buffer;
+		    char *     bufferTemp;
 		    char *     outputDirectory;
 		    char *     tableBlock; 
-		    char *     filename;               
+		    char *     filename;  
 	       
 	       unsigned char *     dirArray;                                  
 		   unsigned char *     IndexPointer;                
@@ -164,6 +166,8 @@ class ext2
 			Groupblock gblock;
 			Directory  currentDir;
 			Inode      currentInode;
+
+			Superblock blockGroupSB; //used for checking integrity
 			
 		
 };
@@ -328,12 +332,6 @@ void ext2::readGroupDescriptorTable()
 	
 	memcpy(&gblock, buffer, 32);
 	
-	
-	/* # of block groups on disk */
-	unsigned int groups = theSuperblock.s_blocks_count / theSuperblock.s_blocks_per_group;
-
-	/* size of group descriptor list in bytes */
-	unsigned int desc_list_size = groups * sizeof(struct Groupblock);
 
 	usedinodes = theSuperblock.s_inodes_per_group - gblock.bg_free_inodes_count;
 	
@@ -415,6 +413,8 @@ void ext2::OutputInodeTableBlock()
 	{
 		cout << buffer[i + InodeTableBlock + 1024];
 	}
+
+	cout << "\n" << endl;
 }
 
 //function to choose directory to move file to 
@@ -731,3 +731,60 @@ void ext2::fetchBlock()
 }
 
 
+/* NOT COMPLETE */
+void ext2::checkSuperblockConsistency()
+{ 
+	// read master super block into buffer for comparison
+	filestream.seekg(1024, ios_base::beg); 
+	filestream.read(buffer, 1024); 
+	memcpy(&theSuperblock, buffer, 1024); 
+	
+	blockSize = 1024 << theSuperblock.s_log_block_size; 
+	groups = theSuperblock.s_blocks_count / theSuperblock.s_blocks_per_group; 
+	bufferTemp = new char[blockSize]; //initialize buffer
+	
+	/* # of block groups on disk */
+	unsigned int blockGroupCount = ceil(theSuperblock.s_blocks_count / theSuperblock.s_blocks_per_group);
+
+	/* for loop variable - block group numbers are 1 based */
+	unsigned int currentBlockGroupNum;
+
+	/* size of group descriptor list in bytes */
+	unsigned int desc_list_size = groups * sizeof(struct Groupblock);
+
+	/* Address of each block group, given a group number(1 based) */
+	unsigned int block_group_address;
+
+	for(currentBlockGroupNum = 2; currentBlockGroupNum <= blockGroupCount; currentBlockGroupNum++) //start at block group 2
+	{
+		//get block group address for current group
+		block_group_address = ((currentBlockGroupNum - 1) * theSuperblock.s_blocks_per_group);
+
+		//read SB of current block group into bufferTemp for comparison
+		cout << "... reading in SB of group number: " << currentBlockGroupNum << "\n";
+		filestream.seekg(block_group_address, ios_base::beg); 
+		filestream.read(bufferTemp, 1024); 
+		memcpy(&blockGroupSB, bufferTemp, 1024);
+
+		//compare to master SB at byte 1024		
+		cout << "... comparing SB at address: " << block_group_address << " to master SB" << "\n";
+		int n;
+  		n=strcmp ( buffer, bufferTemp);
+  		cout << "n = " << n << endl;
+
+/*
+  		if(n == 0)
+  		{
+  			cout << "Superblock is CONSISTENT\n\n";
+  		}
+  		else
+  			cout << "INCONSISTENT\n\n";
+*/
+		//clear bufferTemp buffer
+		bufferTemp = new char[blockSize];
+
+	} //end for
+
+	//clear buffer
+	buffer = new char[blockSize];	    
+}

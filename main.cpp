@@ -17,10 +17,16 @@ int main()
 {
 	ext2 file;
 	file.selectFileTest();
+
+	/* display general stats */
 	file.readSuperblockInfo();
 	file.readGroupDescriptorTable();
 	file.readRootInodeInfo();
 	file.readDirectoryInfo();
+
+	/* check integrity */
+	file.checkSuperblockConsistency();
+
 
 	return 0;
 }
